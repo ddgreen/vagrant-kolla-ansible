@@ -1,13 +1,16 @@
 script = <<SCRIPT
 apt update && apt upgrade -y
 apt install python3-dev libffi-dev gcc libssl-dev -y
-pip3 install ansible==2.10
-pip3 install -U pip
-pip3 install git+https://opendev.org/openstack/kolla-ansible@stable/xena
+apt install python3-venv
+python3 -m venv kolla-ansible/venv
+source kolla-ansible/venv
+pip install -U pip
+pip install 'ansible<5.0'
+pip install git+https://opendev.org/openstack/kolla-ansible@stable/xena
 mkdir -p /etc/kolla
 chown $USER:$USER /etc/kolla
-cp -r /usr/local/share/kolla-ansible/etc_examples/kolla/* /etc/kolla
-cp /usr/local/share/kolla-ansible/ansible/inventory/* .
+cp -r kolla-ansible/venv/share/kolla-ansible/etc_examples/kolla/* /etc/kolla
+cp kolla-ansible/venv/share/kolla-ansible/ansible/inventory/* .
 SCRIPT
 
 Vagrant.configure("2") do |config|
